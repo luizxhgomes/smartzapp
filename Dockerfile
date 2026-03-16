@@ -6,17 +6,16 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Build args injetados pelo Easypanel
-ARG NODE_ENV=production
 ARG NEXT_PUBLIC_SUPABASE_URL
 ARG NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
-ENV NODE_ENV=$NODE_ENV
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
 ENV NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Instalar TODAS as deps (incluindo devDeps para o build)
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --include=dev
 
 COPY . .
 RUN npm run build
