@@ -13,7 +13,6 @@ ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
 ENV NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Instalar TODAS as deps (incluindo devDeps para o build)
 COPY package*.json ./
 RUN npm ci --include=dev
 
@@ -36,6 +35,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/supabase/migrations ./supabase/migrations
 
+# Entrypoint que carrega .env antes de iniciar o Node
+COPY --chown=nextjs:nodejs infra/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 USER nextjs
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["/app/entrypoint.sh"]
