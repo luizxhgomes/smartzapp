@@ -42,3 +42,4 @@ RUN chmod +x /app/entrypoint.sh
 USER nextjs
 EXPOSE 3000
 CMD ["/app/entrypoint.sh"]
+# Force rebuild 1773707536
