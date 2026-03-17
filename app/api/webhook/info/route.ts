@@ -4,17 +4,21 @@ import { settingsDb } from '@/lib/supabase-db'
 import { getVerifyToken } from '@/lib/verify-token'
 
 export async function GET() {
-  // Build webhook URL - prioritize Vercel Production URL
+  // Build webhook URL
   let webhookUrl: string
 
   const vercelEnv = process.env.VERCEL_ENV || null
 
-  // Importante:
-  // - Em produção: queremos o domínio canônico (custom domain / production URL).
-  // - Em preview: queremos o domínio do DEPLOY atual (VERCEL_URL), caso contrário
-  //   o usuário acha que está testando a branch, mas os webhooks continuam indo
-  //   para produção.
-  if (vercelEnv === 'production' && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+  // Prioridade:
+  // 1. WEBHOOK_BASE_URL (override explícito — permite fixar o domínio canônico)
+  // 2. VERCEL_PROJECT_PRODUCTION_URL (domínio de produção da Vercel)
+  // 3. VERCEL_URL (domínio do deploy atual — útil em preview)
+  // 4. NEXT_PUBLIC_APP_URL (fallback genérico)
+  // 5. localhost (desenvolvimento local)
+  if (process.env.WEBHOOK_BASE_URL) {
+    const base = process.env.WEBHOOK_BASE_URL.trim().replace(/\/+$/, '')
+    webhookUrl = `${base}/api/webhook`
+  } else if (vercelEnv === 'production' && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
     webhookUrl = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.trim()}/api/webhook`
   } else if (process.env.VERCEL_URL) {
     webhookUrl = `https://${process.env.VERCEL_URL.trim()}/api/webhook`
