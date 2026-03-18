@@ -354,6 +354,35 @@ export function StepTemplateConfig({
             </div>
           </div>
 
+          {/* Dynamic Token Formula Reference */}
+          <div className="mb-4 p-3 bg-amber-500/5 border border-amber-500/20 rounded-lg">
+            <p className="text-xs font-bold text-amber-400 mb-2 flex items-center gap-1.5">
+              <AlertCircle size={12} />
+              Tokens disponíveis para personalização
+            </p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+              <div className="flex items-center gap-2">
+                <code className="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">{'{{nome}}'}</code>
+                <span className="text-[11px] text-[var(--ds-text-muted)]">Nome do contato</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <code className="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">{'{{telefone}}'}</code>
+                <span className="text-[11px] text-[var(--ds-text-muted)]">Telefone</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <code className="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">{'{{email}}'}</code>
+                <span className="text-[11px] text-[var(--ds-text-muted)]">E-mail</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <code className="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">{'{{campo}}'}</code>
+                <span className="text-[11px] text-[var(--ds-text-muted)]">Campo personalizado</span>
+              </div>
+            </div>
+            <p className="text-[10px] text-[var(--ds-text-muted)] mt-2">
+              Use o botão <span className="font-mono text-amber-400">{'{ }'}</span> ao lado de cada campo para inserir tokens, ou digite manualmente. Valores fixos também são aceitos.
+            </p>
+          </div>
+
           <div className="space-y-4">
             {/* HEADER Variables */}
             {templateVariableInfo.header.length > 0 && (
